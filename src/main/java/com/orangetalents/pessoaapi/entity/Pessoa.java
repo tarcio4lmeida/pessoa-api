@@ -2,12 +2,15 @@ package com.orangetalents.pessoaapi.entity;
 
 import java.io.Serializable;
 import java.time.Instant;
+import java.time.LocalDate;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 @Entity
 @Table(name = "tb_pessoa")
@@ -20,13 +23,15 @@ public class Pessoa implements Serializable {
 	private String nome;
 	private String email;
 	private String cpf;
-	private Instant dataNascimento;
+	
+	@JsonFormat(pattern = "dd/MM/yyyy")
+	private LocalDate  dataNascimento;
 
 	public Pessoa() {
 	}
 
 	public Pessoa(Long id, String nome, String email, 
-				String cpf, Instant dataNascimento) {
+				String cpf, LocalDate  dataNascimento) {
 		this.id = id;
 		this.nome = nome;
 		this.email = email;
@@ -68,11 +73,11 @@ public class Pessoa implements Serializable {
 		this.cpf = cpf;
 	}
 
-	public Instant getDataNascimento() {
+	public LocalDate getDataNascimento() {
 		return dataNascimento;
 	}
 
-	public void setDataNascimento(Instant dataNascimento) {
+	public void setDataNascimento(LocalDate dataNascimento) {
 		this.dataNascimento = dataNascimento;
 	}
 
