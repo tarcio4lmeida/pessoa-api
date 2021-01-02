@@ -1,8 +1,6 @@
 package com.orangetalents.pessoaapi.controller;
 
-import java.time.Instant;
-import java.time.LocalDate;
-import java.util.ArrayList;
+import java.net.URI;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,30 +12,29 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import com.orangetalents.pessoaapi.dto.PessoaDTO;
 import com.orangetalents.pessoaapi.entity.Pessoa;
-import com.orangetalents.pessoaapi.repository.PessoaRepository;
+import com.orangetalents.pessoaapi.service.PessoaService;
 
 @RestController
 @RequestMapping(value="/pessoas")
 public class PessoaController {
 	
 	@Autowired
-	private PessoaRepository repository;
+	private PessoaService pessoaService;
 	
 	@PostMapping
-	@ResponseStatus(HttpStatus.CREATED)
-	public Pessoa save(@RequestBody Pessoa pessoa) {
-		return repository.save(pessoa);
-
+	public  ResponseEntity<PessoaDTO> save(@RequestBody PessoaDTO dto) {
+		dto = pessoaService.save(dto);
+		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(dto.getId()).toUri();
+		return ResponseEntity.created(uri).body(dto);
 	}
 	
 	@GetMapping
 	public ResponseEntity<List<Pessoa>> findAll(){
-		List<Pessoa> list = new ArrayList<>();
-		list.add(new Pessoa(1L, "Maria Silva", "mariasilva@gmail.com","12345678901", LocalDate.now()));
-		list.add(new Pessoa(2L, "João Gomes", "joaogomes@gmail.com", "12345678901", LocalDate .now()));
-		list.add(new Pessoa(3L, "Tereza Cristina","terezacristina@gmail.com", "12345678901", LocalDate .now()));
+		List<Pessoa>list = pessoaService.findAll();
 
 		return ResponseEntity.ok().body(list);
 	}
