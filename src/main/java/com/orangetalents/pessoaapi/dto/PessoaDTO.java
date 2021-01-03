@@ -3,6 +3,11 @@ package com.orangetalents.pessoaapi.dto;
 import java.io.Serializable;
 import java.time.LocalDate;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
+import org.hibernate.validator.constraints.br.CPF;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.orangetalents.pessoaapi.entity.Pessoa;
 
@@ -10,13 +15,20 @@ public class PessoaDTO implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private Long id;
+	@NotBlank(message = "{campo.nome.obrigatorio}")
 	private String nome;
+	
+	@NotBlank(message = "{campo.email.obrigatorio}")
 	private String email;
+	
+	@NotBlank(message = "{campo.cpf.obrigatorio}")
+	@CPF(message = "{campo.cpf.invalido}")
 	private String cpf;
 	
+	@NotNull(message = "{campo.dataNascimento.obrigatorio}")
 	@JsonFormat(pattern = "dd/MM/yyyy")
 	private LocalDate  dataNascimento;
-
+	
 	public PessoaDTO() {
 	}
 
@@ -36,7 +48,6 @@ public class PessoaDTO implements Serializable {
 		this.cpf = p.getCpf();
 		this.dataNascimento = p.getDataNascimento();
 	}
-	
 	// Getters e Setters Omissos
 
 	public Long getId() {

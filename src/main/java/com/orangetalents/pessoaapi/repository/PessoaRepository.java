@@ -8,5 +8,6 @@ import com.orangetalents.pessoaapi.entity.Pessoa;
 
 @Repository
 public interface PessoaRepository extends JpaRepository<Pessoa, Long> {
-
+	boolean existsByCpf(String cpf);
+	boolean existsByEmail(String email);
 }

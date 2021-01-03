@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.orangetalents.pessoaapi.dto.PessoaDTO;
 import com.orangetalents.pessoaapi.entity.Pessoa;
 import com.orangetalents.pessoaapi.repository.PessoaRepository;
+import com.orangetalents.pessoaapi.service.exceptions.CadastradoException;
 
 @Service
 public class PessoaService {
@@ -20,6 +21,8 @@ public class PessoaService {
 	}
 	
 	public PessoaDTO save(PessoaDTO dto){
+		//this.validaPessoa(dto);
+		
 		Pessoa entity = new Pessoa();
 		
 		copyDtoToEntity(dto, entity);
@@ -34,5 +37,24 @@ public class PessoaService {
 		entity.setCpf(dto.getCpf());		
 		entity.setEmail(dto.getEmail());
 		entity.setDataNascimento(dto.getDataNascimento());
+	}
+	
+	private void validaPessoa(PessoaDTO dto) {
+		validaCpf(dto);
+		validaEmail(dto);
+	}
+	
+	private void validaCpf(PessoaDTO dto) {
+		boolean exists = pessoaRepository.existsByCpf(dto.getCpf());
+		if (exists) {
+			throw new CadastradoException("CPF ja cadastrado");
+		}
+	}
+	
+	private void validaEmail(PessoaDTO dto) {
+		boolean exists = pessoaRepository.existsByEmail(dto.getEmail());
+		if (exists) {
+			throw new CadastradoException("Email ja cadastrado");
+		}
 	}
 }
