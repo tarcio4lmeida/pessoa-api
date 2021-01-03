@@ -21,7 +21,7 @@ public class PessoaService {
 	}
 	
 	public PessoaDTO save(PessoaDTO dto){
-		//this.validaPessoa(dto);
+		this.validaPessoa(dto);
 		
 		Pessoa entity = new Pessoa();
 		
